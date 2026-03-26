@@ -221,7 +221,7 @@ button { font: inherit; }
 
 .heart-label {
   position: absolute;
-  top: 54%;
+  top: 56%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -229,27 +229,31 @@ button { font: inherit; }
   align-items: center;
   justify-content: center;
 
-  width: 42%;
-  max-width: 42%;
+  width: 36%;
+  max-width: 36%;
+
   text-align: center;
 
-  padding: 0;
-  margin: 0;
-
-  font-size: clamp(0.82rem, 1.8vw, 1.05rem);
-  line-height: 1;
+  font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+  line-height: 1.05;
   font-weight: 700;
   font-family: Caveat, cursive;
-  color: #351525;
-  text-shadow: none;
+
+  color: #351525 !important;
 
   opacity: 0;
   transition: opacity 220ms ease;
   pointer-events: none;
   z-index: 2;
 
-  word-break: keep-all;
-  overflow-wrap: break-word;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.heart-label,
+.heart-label * {
+  color: #351525 !important;
+  text-decoration: none !important;
 }
 
 .heart-card.revealed .heart-label { 
@@ -380,9 +384,9 @@ button { font: inherit; }
 
 @media (max-width: 700px) {
   .main-title {
-    font-size: clamp(2.2rem, 10vw, 3.1rem);
-    line-height: 0.95;
-  }
+  font-size: clamp(2rem, 8vw, 2.8rem);
+  line-height: 1;
+}
 
   .subtext,
   .small-note {
