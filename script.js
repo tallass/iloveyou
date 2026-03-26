@@ -55,7 +55,7 @@ const birthdayStages = [
   { kind: 'text', html: '<div class="birthday-stage">Tap</div>' },
   { kind: 'text', html: '<div class="birthday-stage">March 31st.</div>' },
   { kind: 'text', html: '<div class="birthday-stage">The day you were born.</div>' },
-  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
+  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\\'m so lucky I get to love you.</div></div>' },
   { kind: 'video' },
 ];
 
@@ -117,9 +117,7 @@ async function unlockAudio() {
     await heartsAudio.play();
     heartsAudio.pause();
     heartsAudio.currentTime = 0;
-  } catch (err) {
-    // iPhone may still block until a direct user interaction; ignore safely.
-  }
+  } catch (err) {}
 }
 
 function pauseAllTimelineVideos() {
@@ -127,6 +125,14 @@ function pauseAllTimelineVideos() {
     video.pause();
     video.currentTime = 0;
   });
+}
+
+function stopBirthdayVideo() {
+  const birthdayVideo = document.getElementById('birthdayVideo');
+  if (birthdayVideo) {
+    birthdayVideo.pause();
+    birthdayVideo.currentTime = 0;
+  }
 }
 
 function updateAudioForScreen(screenId) {
@@ -150,6 +156,10 @@ function updateAudioForScreen(screenId) {
 function showScreen(screenId) {
   pauseAllTimelineVideos();
 
+  if (screenId !== 'screen-birthday') {
+    stopBirthdayVideo();
+  }
+
   document.querySelectorAll('.screen').forEach((screen) => {
     screen.classList.remove('active');
   });
@@ -166,9 +176,14 @@ function showScreen(screenId) {
     startLetter();
   }
 
+  if (screenId === 'screen-timeline') {
+    renderTimeline();
+  }
+
   if (screenId === 'screen-birthday') {
     heartsAudio.pause();
     heartsAudio.currentTime = 0;
+    appState.birthdayStage = 0;
     renderBirthdayStage();
   }
 }
@@ -255,8 +270,6 @@ function nextTimeline() {
     appState.timelineIndex += 1;
     renderTimeline();
   } else {
-    heartsAudio.pause();
-    heartsAudio.currentTime = 0;
     showScreen('screen-birthday');
   }
 }
@@ -273,7 +286,7 @@ function renderBirthdayStage() {
   const wrap = document.createElement('div');
   wrap.className = 'birthday-stage';
   wrap.innerHTML = `
-    <video id="birthdayVideo" class="birthday-video" src="assets/birthday.mp4" controls autoplay playsinline></video>
+    <video id="birthdayVideo" class="birthday-video" src="assets/birthday.mp4" controls autoplay playsinline preload="metadata"></video>
     <div class="small-note">Tap one last time</div>
   `;
   birthdayPanel.appendChild(wrap);
@@ -284,6 +297,7 @@ function renderBirthdayStage() {
     birthdayVideo.controls = true;
     birthdayVideo.playsInline = true;
     birthdayVideo.preload = 'metadata';
+    birthdayVideo.play().catch(() => {});
   }
 }
 
@@ -292,8 +306,7 @@ function nextBirthdayStage() {
     appState.birthdayStage += 1;
     renderBirthdayStage();
   } else {
-    const video = birthdayPanel.querySelector('video');
-    if (video) video.pause();
+    stopBirthdayVideo();
     showScreen('screen-playlist');
   }
 }
@@ -319,9 +332,6 @@ function bindEvents() {
   document.querySelectorAll('[data-next]').forEach((button) => {
     button.addEventListener('click', () => {
       const next = button.dataset.next;
-      if (next === 'screen-timeline') {
-        renderTimeline();
-      }
       showScreen(next);
     });
   });

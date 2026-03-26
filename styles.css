@@ -1,12 +1,68 @@
-/* ===== SCREEN (fixes iPhone vertical offset) ===== */
+:root {
+  --bg: #ffd6e8;
+  --bg-soft: #ffe3ec;
+  --panel: rgba(255, 255, 255, 0.45);
+  --text: #351525;
+  --text-soft: rgba(53, 21, 37, 0.72);
+  --accent: #ff5ea8;
+  --accent-2: #ff8dbd;
+  --shadow: 0 20px 60px rgba(113, 42, 74, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: radial-gradient(circle at top, #ffe8f1 0%, var(--bg) 55%, #ffc6dd 100%);
+  color: var(--text);
+  overflow: hidden;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
+.hearts-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.float-heart {
+  position: absolute;
+  bottom: -10vh;
+  opacity: 0.14;
+  animation: floatUp linear infinite;
+  user-select: none;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.14; }
+  100% { transform: translateY(-120vh) translateX(25px) rotate(16deg); opacity: 0; }
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  z-index: 1;
+}
+
+/* ===== FIXED SCREEN LAYOUT ===== */
 .screen {
   position: absolute;
   inset: 0;
-
   display: none;
-  align-items: flex-start; /* 🔥 was center — THIS caused the problem */
+  align-items: flex-start;
   justify-content: center;
-
   padding-top: max(16px, env(safe-area-inset-top));
   padding-bottom: max(16px, env(safe-area-inset-bottom));
   padding-left: 20px;
@@ -17,26 +73,327 @@
   display: flex;
 }
 
-/* ===== PANEL (main card container) ===== */
+.dark-screen {
+  background: #000;
+  color: #fff;
+}
+
+/* ===== FIXED PANEL ===== */
 .panel {
   width: min(880px, 100%);
   max-height: min(88vh, 920px);
-
   overflow: auto;
-
   background: var(--panel);
   backdrop-filter: blur(18px);
   border: 1px solid rgba(255,255,255,0.45);
-
   border-radius: 32px;
   box-shadow: var(--shadow);
-
   padding: 28px;
-
-  margin-top: 6px; /* 🔥 keeps it slightly away from top notch */
+  margin-top: 6px;
 }
 
-/* ===== MOBILE FIX (critical for Safari) ===== */
+.birthday-dark {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.splash-panel,
+.surprise-panel,
+.playlist-panel,
+.birthday-panel {
+  text-align: center;
+}
+
+.image-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pixel-image {
+  width: min(260px, 58vw);
+  height: auto;
+  image-rendering: auto;
+  border-radius: 28px;
+}
+
+.eyebrow,
+.subtext,
+.small-note,
+.timeline-date {
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+}
+
+.main-title,
+.script-title,
+.script-subtitle,
+.heart-label,
+.timeline-text,
+.letter-text,
+.birthday-stage,
+.spotify-button,
+.primary-button,
+.ghost-button {
+  font-family: Caveat, cursive;
+}
+
+.main-title {
+  font-size: clamp(3rem, 7vw, 5rem);
+  margin: 4px 0 0;
+  line-height: 0.95;
+}
+
+.script-title {
+  font-size: clamp(2.2rem, 5.4vw, 3.4rem);
+  line-height: 1.05;
+  margin: 0 0 12px;
+}
+
+.script-subtitle {
+  font-size: clamp(1.8rem, 4.6vw, 2.5rem);
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.subtext,
+.small-note {
+  font-size: 1rem;
+}
+
+.primary-button,
+.ghost-button,
+.spotify-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 14px 24px;
+  min-height: 52px;
+  font-size: 1.65rem;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.primary-button {
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 12px 30px rgba(255, 94, 168, 0.32);
+}
+
+.ghost-button {
+  border: 1px solid rgba(53, 21, 37, 0.14);
+  background: rgba(255,255,255,0.4);
+  color: var(--text);
+}
+
+.spotify-button {
+  background: #1db954;
+  color: white;
+  padding-inline: 28px;
+}
+
+.primary-button:hover,
+.ghost-button:hover,
+.spotify-button:hover {
+  transform: translateY(-2px);
+}
+
+.hearts-panel {
+  text-align: center;
+}
+
+.hearts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 18px;
+  margin: 24px auto;
+  width: min(100%, 640px);
+}
+
+.heart-card {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  aspect-ratio: 0.8 / 1;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 10px 24px rgba(83, 23, 48, 0.12));
+}
+
+.heart-label {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55%;
+  text-align: center;
+  font-size: clamp(0.9rem, 2.8vw, 1.2rem);
+  line-height: 1.1;
+  font-weight: 700;
+  font-family: Caveat, cursive;
+  color: #351525 !important;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  pointer-events: none;
+  z-index: 2;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.heart-label,
+.heart-label * {
+  color: #351525 !important;
+  text-decoration: none !important;
+}
+
+.heart-card.revealed .heart-label {
+  opacity: 1;
+}
+
+.letter-panel { text-align: center; }
+
+.letter-card {
+  position: relative;
+  text-align: left;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(53, 21, 37, 0.08);
+  border-radius: 28px;
+  padding: 26px 24px;
+  min-height: 340px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.letter-text {
+  white-space: pre-wrap;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  line-height: 1.25;
+}
+
+.cursor {
+  font-family: Caveat, cursive;
+  font-size: 2rem;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.hidden { display: none; }
+
+.reveal-block { animation: revealUp 500ms ease forwards; }
+
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.timeline-panel {
+  text-align: center;
+}
+
+.timeline-media-wrap {
+  width: min(100%, 760px);
+  margin: 0 auto 18px;
+}
+
+.timeline-media-wrap img,
+.timeline-media-wrap video {
+  width: 100%;
+  max-height: 58vh;
+  min-height: 260px;
+  object-fit: cover;
+  border-radius: 24px;
+  display: block;
+  background: rgba(255,255,255,0.32);
+  box-shadow: 0 16px 38px rgba(91, 28, 56, 0.16);
+}
+
+.timeline-text {
+  font-size: clamp(1.8rem, 4.6vw, 2.35rem);
+  line-height: 1.1;
+  margin: 8px auto 18px;
+  max-width: 720px;
+}
+
+.timeline-dots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(53, 21, 37, 0.18);
+}
+
+.timeline-dot.active {
+  width: 26px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.fade-in { animation: fadeIn 320ms ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.birthday-panel {
+  display: grid;
+  place-items: center;
+  min-height: 70vh;
+}
+
+.birthday-stage {
+  text-align: center;
+  color: white;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1.05;
+}
+
+.birthday-stage .small-note {
+  color: rgba(255,255,255,0.72);
+  font-family: Caveat, cursive;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+
+.birthday-video {
+  width: min(360px, 82vw);
+  border-radius: 24px;
+  background: #111;
+  box-shadow: 0 16px 42px rgba(0,0,0,0.32);
+}
+
 @media (max-width: 700px) {
   .screen {
     padding-top: max(10px, env(safe-area-inset-top));
@@ -45,15 +402,45 @@
 
   .panel {
     margin-top: 0;
-
-    max-height: calc(
-      100dvh 
-      - env(safe-area-inset-top) 
-      - env(safe-area-inset-bottom) 
-      - 16px
-    );
-
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px);
     padding: 22px;
     border-radius: 24px;
   }
+
+  .main-title {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    line-height: 1;
+  }
+
+  .subtext,
+  .small-note {
+    font-size: 0.95rem;
+  }
+
+  .hearts-grid {
+    grid-template-columns: repeat(2, minmax(110px, 1fr));
+    gap: 14px;
+  }
+
+  .heart-label {
+    width: 60%;
+    font-size: 1.1rem;
+  }
+
+  .primary-button,
+  .ghost-button,
+  .spotify-button {
+    width: 100%;
+  }
+
+  .button-row > * {
+    flex: 1 1 100%;
+  }
+}
+
+/* ===== HARD KILL ANY ACCIDENTAL GLOBAL BACKGROUND VIDEO ===== */
+body > video,
+.app-shell > video,
+.screen > video:not(.birthday-video) {
+  display: none !important;
 }
