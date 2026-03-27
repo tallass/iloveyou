@@ -55,7 +55,7 @@ const birthdayStages = [
   { kind: 'text', html: '<div class="birthday-stage">Tap</div>' },
   { kind: 'text', html: '<div class="birthday-stage">March 31st.</div>' },
   { kind: 'text', html: '<div class="birthday-stage">The day you were born.</div>' },
-  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\\'m so lucky I get to love you.</div></div>' },
+  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
   { kind: 'video' },
 ];
 
@@ -101,22 +101,24 @@ function initHeartsGrid() {
     heartsGrid.appendChild(button);
   });
 }
-
 async function unlockAudio() {
   if (appState.audioUnlocked) return;
   appState.audioUnlocked = true;
 
   try {
-    splashAudio.muted = false;
-    heartsAudio.muted = false;
+    if (splashAudio) {
+      splashAudio.muted = false;
+      await splashAudio.play();
+      splashAudio.pause();
+      splashAudio.currentTime = 0;
+    }
 
-    await splashAudio.play();
-    splashAudio.pause();
-    splashAudio.currentTime = 0;
-
-    await heartsAudio.play();
-    heartsAudio.pause();
-    heartsAudio.currentTime = 0;
+    if (heartsAudio) {
+      heartsAudio.muted = false;
+      await heartsAudio.play();
+      heartsAudio.pause();
+      heartsAudio.currentTime = 0;
+    }
   } catch (err) {}
 }
 
@@ -318,16 +320,22 @@ function bindEvents() {
   const timelineNextBtn = document.getElementById('timeline-next');
 
   startBtn.addEventListener('click', async () => {
+  try {
     await unlockAudio();
+  } catch (err) {}
 
+  if (splashAudio) {
     splashAudio.play().catch(() => {});
+  }
 
-    setTimeout(() => {
+  setTimeout(() => {
+    if (splashAudio) {
       splashAudio.pause();
       splashAudio.currentTime = 0;
-      showScreen('screen-hearts');
-    }, 800);
-  });
+    }
+    showScreen('screen-hearts');
+  }, 800);
+});
 
   document.querySelectorAll('[data-next]').forEach((button) => {
     button.addEventListener('click', () => {
