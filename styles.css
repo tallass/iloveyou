@@ -10,7 +10,6 @@
 }
 
 * { box-sizing: border-box; }
-
 html, body {
   margin: 0;
   min-height: 100%;
@@ -18,10 +17,6 @@ html, body {
   color: var(--text);
   overflow: hidden;
   font-family: Inter, system-ui, sans-serif;
-}
-
-body {
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 a { color: inherit; text-decoration: none; }
@@ -32,20 +27,19 @@ button { font: inherit; }
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 0;
 }
 
 .float-heart {
   position: absolute;
   bottom: -10vh;
-  opacity: 0.14;
+  opacity: 0.18;
   animation: floatUp linear infinite;
   user-select: none;
 }
 
 @keyframes floatUp {
   0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.14; }
+  10% { opacity: 0.18; }
   100% { transform: translateY(-120vh) translateX(25px) rotate(16deg); opacity: 0; }
 }
 
@@ -53,7 +47,6 @@ button { font: inherit; }
   position: relative;
   min-height: 100vh;
   width: 100%;
-  z-index: 1;
 }
 
 .screen {
@@ -62,16 +55,18 @@ button { font: inherit; }
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
 }
 
-.screen.active {
-  display: flex;
+.screen.active { display: flex; }
+.dark-screen {
+  background: #000;
+  color: #fff;
 }
 
 .panel {
   width: min(880px, 100%);
-  max-height: 90vh;
+  max-height: min(90vh, 920px);
   overflow: auto;
   background: var(--panel);
   backdrop-filter: blur(18px);
@@ -130,7 +125,7 @@ button { font: inherit; }
 }
 
 .main-title {
-  font-size: clamp(3rem, 7vw, 5rem);
+  font-size: clamp(3.2rem, 8vw, 5.4rem);
   margin: 4px 0 0;
   line-height: 0.95;
 }
@@ -211,9 +206,6 @@ button { font: inherit; }
   padding: 0;
   aspect-ratio: 0.8 / 1;
   min-height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .heart-card img {
@@ -226,39 +218,33 @@ button { font: inherit; }
 
 .heart-label {
   position: absolute;
-  top: 44%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 55%;
+
   text-align: center;
-  font-size: clamp(0.9rem, 2.8vw, 1.2rem);
-  line-height: 1.1;
-  font-weight: 700;
-  font-family: Caveat, cursive;
-  color: #351525 !important;
+
+  /* 🔥 FIX: remove weird padding that pushes text down */
+  padding: 0;
+
+  /* 🔥 FIX: make it actually fill nicely */
+  width: 100%;
+  height: 120%;
+
+  font-size: clamp(1.4rem, 3.2vw, 2rem); /* bigger */
+  line-height: 1.2;
+
   opacity: 0;
   transition: opacity 220ms ease;
+
   pointer-events: none;
-  z-index: 2;
-  white-space: normal;
-  word-break: break-word;
 }
 
-.heart-label,
-.heart-label * {
-  color: #351525 !important;
-  text-decoration: none !important;
-}
-
-.heart-card.revealed .heart-label {
-  opacity: 1;
-}
+.heart-card.revealed .heart-label { opacity: 1; }
 
 .letter-panel { text-align: center; }
-
 .letter-card {
   position: relative;
   text-align: left;
@@ -293,9 +279,7 @@ button { font: inherit; }
 }
 
 .hidden { display: none; }
-
 .reveal-block { animation: revealUp 500ms ease forwards; }
-
 @keyframes revealUp {
   from { opacity: 0; transform: translateY(16px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -351,7 +335,6 @@ button { font: inherit; }
 }
 
 .fade-in { animation: fadeIn 320ms ease; }
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -384,24 +367,8 @@ button { font: inherit; }
 }
 
 @media (max-width: 700px) {
-  .screen {
-    padding: 14px;
-  }
-
-  .panel {
-    width: 100%;
-    max-height: calc(100vh - 28px);
-    padding: 20px 16px 24px;
-    border-radius: 24px;
-  }
-
-  .main-title {
-    font-size: clamp(2rem, 8vw, 2.8rem);
-    line-height: 1;
-  }
-
-  .hearts-grid {
-    grid-template-columns: repeat(2, minmax(110px, 1fr));
-    gap: 14px;
-  }
+  .panel { padding: 20px 16px; border-radius: 26px; }
+  .hearts-grid { grid-template-columns: repeat(2, minmax(110px, 1fr)); gap: 14px; }
+  .primary-button, .ghost-button, .spotify-button { width: 100%; }
+  .button-row > * { flex: 1 1 100%; }
 }

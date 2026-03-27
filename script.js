@@ -7,9 +7,6 @@ const appState = {
   audioUnlocked: false,
 };
 
-const splashAudio = document.getElementById('splashAudio');
-const heartsAudio = document.getElementById('heartsAudio');
-
 const heartMessages = [
   'your smile',
   'your laugh',
@@ -44,7 +41,7 @@ const timelineItems = [
   { type: 'image', date: 'Jan 1', text: 'New years together', src: 'assets/jan1.jpg' },
   { type: 'image', date: 'Jan 22', text: 'The day I asked you out', src: 'assets/jan22_1.jpg' },
   { type: 'image', date: 'Jan 25', text: "when i knew you're the only woman for me", src: 'assets/jan25.jpg' },
-  { type: 'video', date: 'Jan 25', text: 'A memory I never forget', src: 'assets/jan25_1.mp4' },
+  { type: 'video', date: 'Jan 25', text: 'WE HAD SEX', src: 'assets/jan25_1.mp4' },
   { type: 'video', date: 'Jan 25', text: 'I saw a goddess infront of me', src: 'assets/jan25_2.mp4' },
   { type: 'video', date: 'man i love ragebaiting you', text: 'i love how you fall for my ragebait everytime', src: 'assets/ragebait.mp4' },
   { type: 'video', date: 'the toilet stalls', text: 'getting stuck in toilet stalls with you is like genuinely so funny', src: 'assets/bathroom.mp4' },
@@ -55,10 +52,11 @@ const birthdayStages = [
   { kind: 'text', html: '<div class="birthday-stage">Tap</div>' },
   { kind: 'text', html: '<div class="birthday-stage">March 31st.</div>' },
   { kind: 'text', html: '<div class="birthday-stage">The day you were born.</div>' },
-  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
+  { kind: 'text', html: '<div class="birthday-stage">The day the world got blessed by you.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
   { kind: 'video' },
 ];
 
+const screens = document.querySelectorAll('.screen');
 const floatingHearts = document.getElementById('floating-hearts');
 const heartsGrid = document.getElementById('hearts-grid');
 const letterTextEl = document.getElementById('letter-text');
@@ -68,6 +66,8 @@ const timelineText = document.getElementById('timeline-text');
 const timelineMediaWrap = document.getElementById('timeline-media-wrap');
 const timelineDots = document.getElementById('timeline-dots');
 const birthdayPanel = document.getElementById('birthday-panel');
+const splashAudio = document.getElementById('splash-audio');
+const heartsAudio = document.getElementById('hearts-audio');
 
 function initFloatingHearts() {
   for (let i = 0; i < 16; i += 1) {
@@ -91,7 +91,7 @@ function initHeartsGrid() {
     button.className = 'heart-card';
     button.innerHTML = `
       <img src="${heartImages[index]}" alt="heart ${index + 1}" />
-      <span class="heart-label">I love your ${message}</span>
+      <span class="heart-label">I love ${message}</span>
     `;
     button.addEventListener('click', () => {
       const open = heartsGrid.querySelector('.heart-card.revealed');
@@ -101,92 +101,35 @@ function initHeartsGrid() {
     heartsGrid.appendChild(button);
   });
 }
+
+function showScreen(screenId) {
+  screens.forEach((screen) => screen.classList.toggle('active', screen.id === screenId));
+  appState.currentScreen = screenId;
+
+  if (screenId === 'screen-letter') startLetter();
+  if (screenId === 'screen-timeline') renderTimeline();
+  if (screenId === 'screen-birthday') renderBirthdayStage();
+}
+
 async function unlockAudio() {
   if (appState.audioUnlocked) return;
   appState.audioUnlocked = true;
-
   try {
-    if (splashAudio) {
-      splashAudio.muted = false;
-      await splashAudio.play();
-      splashAudio.pause();
-      splashAudio.currentTime = 0;
-    }
-
-    if (heartsAudio) {
-      heartsAudio.muted = false;
-      await heartsAudio.play();
-      heartsAudio.pause();
-      heartsAudio.currentTime = 0;
-    }
-  } catch (err) {}
-}
-
-function pauseAllTimelineVideos() {
-  document.querySelectorAll('.timeline-media-wrap video').forEach((video) => {
-    video.pause();
-    video.currentTime = 0;
-  });
-}
-
-function stopBirthdayVideo() {
-  const birthdayVideo = document.getElementById('birthdayVideo');
-  if (birthdayVideo) {
-    birthdayVideo.pause();
-    birthdayVideo.currentTime = 0;
+    splashAudio.volume = 0.75;
+    heartsAudio.volume = 0.65;
+    await splashAudio.play();
+  } catch (err) {
+    console.warn('Audio could not start yet:', err);
   }
 }
 
-function updateAudioForScreen(screenId) {
-  if (screenId === 'screen-splash') {
-    heartsAudio.pause();
-    heartsAudio.currentTime = 0;
-    return;
-  }
-
-  if (screenId === 'screen-birthday') {
-    heartsAudio.pause();
-    heartsAudio.currentTime = 0;
-    return;
-  }
-
-  if (heartsAudio.paused) {
-    heartsAudio.play().catch(() => {});
-  }
-}
-
-function showScreen(screenId) {
-  pauseAllTimelineVideos();
-
-  if (screenId !== 'screen-birthday') {
-    stopBirthdayVideo();
-  }
-
-  document.querySelectorAll('.screen').forEach((screen) => {
-    screen.classList.remove('active');
-  });
-
-  const nextScreen = document.getElementById(screenId);
-  if (nextScreen) {
-    nextScreen.classList.add('active');
-    appState.currentScreen = screenId;
-  }
-
-  updateAudioForScreen(screenId);
-
-  if (screenId === 'screen-letter') {
-    startLetter();
-  }
-
-  if (screenId === 'screen-timeline') {
-    renderTimeline();
-  }
-
-  if (screenId === 'screen-birthday') {
-    heartsAudio.pause();
-    heartsAudio.currentTime = 0;
-    appState.birthdayStage = 0;
-    renderBirthdayStage();
+async function startHeartsMusic() {
+  try {
+    splashAudio.pause();
+    splashAudio.currentTime = 0;
+    await heartsAudio.play();
+  } catch (err) {
+    console.warn('Hearts audio failed:', err);
   }
 }
 
@@ -201,10 +144,8 @@ function typeNextChar() {
     letterCursor.style.display = 'none';
     return;
   }
-
   letterTextEl.textContent += letterText[appState.letterIndex];
   appState.letterIndex += 1;
-
   const char = letterText[appState.letterIndex - 1];
   const delay = char === '\n' ? 12 : char === '.' ? 45 : 18;
   appState.letterTimer = setTimeout(typeNextChar, delay);
@@ -217,33 +158,22 @@ function finishLetter() {
   letterCursor.style.display = 'none';
 }
 
-function createTimelineVideo(src) {
-  const video = document.createElement('video');
-  video.src = src;
-  video.controls = true;
-  video.autoplay = true;
-  video.muted = true;
-  video.playsInline = true;
-  video.preload = 'metadata';
-  return video;
-}
-
 function renderTimeline() {
   const item = timelineItems[appState.timelineIndex];
   timelineDate.textContent = item.date;
   timelineText.textContent = item.text;
   timelineMediaWrap.innerHTML = '';
 
-  let media;
-
+  const media = document.createElement(item.type === 'video' ? 'video' : 'img');
+  media.src = item.src;
   if (item.type === 'video') {
-    media = createTimelineVideo(item.src);
+    media.controls = true;
+    media.autoplay = true;
+    media.muted = false;
+    media.playsInline = true;
   } else {
-    media = document.createElement('img');
-    media.src = item.src;
     media.alt = item.text;
   }
-
   timelineMediaWrap.appendChild(media);
 
   timelineDots.innerHTML = '';
@@ -254,11 +184,9 @@ function renderTimeline() {
   });
 
   const content = document.getElementById('timeline-content');
-  if (content) {
-    content.classList.remove('fade-in');
-    void content.offsetWidth;
-    content.classList.add('fade-in');
-  }
+  content.classList.remove('fade-in');
+  void content.offsetWidth;
+  content.classList.add('fade-in');
 }
 
 function nextTimeline() {
@@ -267,11 +195,11 @@ function nextTimeline() {
     media.pause();
     media.currentTime = 0;
   }
-
   if (appState.timelineIndex < timelineItems.length - 1) {
     appState.timelineIndex += 1;
     renderTimeline();
   } else {
+    try { heartsAudio.pause(); } catch (err) {}
     showScreen('screen-birthday');
   }
 }
@@ -282,24 +210,14 @@ function renderBirthdayStage() {
 
   if (stage.kind === 'text') {
     birthdayPanel.innerHTML = stage.html;
-    return;
-  }
-
-  const wrap = document.createElement('div');
-  wrap.className = 'birthday-stage';
-  wrap.innerHTML = `
-    <video id="birthdayVideo" class="birthday-video" src="assets/birthday.mp4" controls autoplay playsinline preload="metadata"></video>
-    <div class="small-note">Tap one last time</div>
-  `;
-  birthdayPanel.appendChild(wrap);
-
-  const birthdayVideo = document.getElementById('birthdayVideo');
-  if (birthdayVideo) {
-    birthdayVideo.muted = false;
-    birthdayVideo.controls = true;
-    birthdayVideo.playsInline = true;
-    birthdayVideo.preload = 'metadata';
-    birthdayVideo.play().catch(() => {});
+  } else {
+    const wrap = document.createElement('div');
+    wrap.className = 'birthday-stage';
+    wrap.innerHTML = `
+      <video class="birthday-video" src="assets/birthday.mp4" controls autoplay playsinline></video>
+      <div class="small-note">Tap one last time</div>
+    `;
+    birthdayPanel.appendChild(wrap);
   }
 }
 
@@ -308,50 +226,33 @@ function nextBirthdayStage() {
     appState.birthdayStage += 1;
     renderBirthdayStage();
   } else {
-    stopBirthdayVideo();
+    const video = birthdayPanel.querySelector('video');
+    if (video) video.pause();
     showScreen('screen-playlist');
   }
 }
 
 function bindEvents() {
-  const startBtn = document.getElementById('start-btn');
-  const skipLetterBtn = document.getElementById('skip-letter');
-  const unlockBtn = document.getElementById('unlock-btn');
-  const timelineNextBtn = document.getElementById('timeline-next');
-
-  startBtn.addEventListener('click', async () => {
-  try {
+  document.getElementById('start-btn').addEventListener('click', async () => {
     await unlockAudio();
-  } catch (err) {}
-
-  if (splashAudio) {
-    splashAudio.play().catch(() => {});
-  }
-
-  setTimeout(() => {
-    if (splashAudio) {
-      splashAudio.pause();
-      splashAudio.currentTime = 0;
-    }
-    showScreen('screen-hearts');
-  }, 800);
-});
-
-  document.querySelectorAll('[data-next]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const next = button.dataset.next;
-      showScreen(next);
-    });
+    setTimeout(async () => {
+      showScreen('screen-hearts');
+      await startHeartsMusic();
+    }, 800);
   });
 
-  skipLetterBtn.addEventListener('click', finishLetter);
+  document.querySelectorAll('[data-next]').forEach((button) => {
+    button.addEventListener('click', () => showScreen(button.dataset.next));
+  });
 
-  unlockBtn.addEventListener('click', () => {
+  document.getElementById('skip-letter').addEventListener('click', finishLetter);
+
+  document.getElementById('unlock-btn').addEventListener('click', () => {
     document.getElementById('surprise-locked').classList.add('hidden');
     document.getElementById('surprise-reveal').classList.remove('hidden');
   });
 
-  timelineNextBtn.addEventListener('click', nextTimeline);
+  document.getElementById('timeline-next').addEventListener('click', nextTimeline);
   birthdayPanel.addEventListener('click', nextBirthdayStage);
 }
 
