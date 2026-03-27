@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>For You</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="floating-hearts" class="hearts-bg"></div>
+
+  <audio id="splashAudio" src="assets/splash.mp3" preload="auto"></audio>
+  <audio id="heartsAudio" src="assets/hearts.mp3" preload="auto" loop></audio>
+
+  <main class="app-shell">
+    <section id="screen-splash" class="screen active">
+      <div class="panel splash-panel">
+        <div class="image-wrap">
+          <img class="pixel-image" src="assets/pixelCouple.png" alt="pixel couple" />
+        </div>
+        <p class="subtext">turn your volume up 🔊</p>
+        <h1 class="main-title">for you</h1>
+        <p class="subtext">tap to begin</p>
+        <button id="start-btn" class="primary-button">Start</button>
+      </div>
+    </section>
+
+    <section id="screen-hearts" class="screen">
+      <div class="panel hearts-panel">
+        <h1 class="main-title">
+          Happy late Valentine’s Day<br />
+          and happy birthday my love
+        </h1>
+        <p class="subtext">press the hearts for a surprise</p>
+
+        <div id="hearts-grid" class="hearts-grid"></div>
+
+        <div class="button-row">
+          <button class="ghost-button" data-next="screen-letter">Continue ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-letter" class="screen">
+      <div class="panel letter-panel">
+        <h2 class="script-title">A little letter for you</h2>
+
+        <div class="letter-card">
+          <div id="letter-text" class="letter-text"></div>
+          <span id="letter-cursor" class="cursor">|</span>
+        </div>
+
+        <div class="button-row">
+          <button id="skip-letter" class="ghost-button">Skip typing</button>
+          <button class="primary-button" data-next="screen-surprise">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-surprise" class="screen">
+      <div class="panel surprise-panel">
+        <div id="surprise-locked">
+          <h2 class="script-title">One more thing</h2>
+          <p class="subtext">tap to unlock</p>
+          <button id="unlock-btn" class="primary-button">Unlock</button>
+        </div>
+
+        <div id="surprise-reveal" class="hidden reveal-block">
+          <h2 class="script-title">Our story</h2>
+          <p class="subtext">my favorite thing in the world is us</p>
+          <div class="button-row">
+            <button class="primary-button" data-next="screen-timeline">Go to timeline</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-timeline" class="screen">
+      <div class="panel timeline-panel">
+        <div id="timeline-content">
+          <div id="timeline-date" class="timeline-date"></div>
+          <div id="timeline-media-wrap" class="timeline-media-wrap"></div>
+          <div id="timeline-text" class="timeline-text"></div>
+          <div id="timeline-dots" class="timeline-dots"></div>
+        </div>
+
+        <div class="button-row">
+          <button id="timeline-next" class="primary-button">Tap to continue</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-birthday" class="screen dark-screen">
+      <div id="birthday-panel" class="panel birthday-dark birthday-panel"></div>
+    </section>
+
+    <section id="screen-playlist" class="screen">
+      <div class="panel playlist-panel">
+        <h2 class="script-title">One last thing</h2>
+        <p class="subtext">a playlist for you</p>
+        <a
+          class="spotify-button"
+          href="YOUR_LINK"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open playlist
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
