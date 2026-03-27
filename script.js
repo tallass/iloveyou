@@ -54,7 +54,7 @@ milo and or batman.`;
     { type: 'image', date: 'Jan 1', text: 'New years together', src: 'assets/jan1.jpg' },
     { type: 'image', date: 'Jan 22', text: 'The day I asked you out', src: 'assets/jan22_1.jpg' },
     { type: 'image', date: 'Jan 25', text: "when i knew you're the only woman for me", src: 'assets/jan25.jpg' },
-    { type: 'video', date: 'Jan 25', text: 'A memory I never forget', src: 'assets/jan25_1.mp4' },
+    { type: 'video', date: 'Jan 25', text: 'WE HAD SEXX', src: 'assets/jan25_1.mp4' },
     { type: 'video', date: 'Jan 25', text: 'I saw a goddess infront of me', src: 'assets/jan25_2.mp4' },
     { type: 'video', date: 'Ragebait', text: 'i love how you fall for my ragebait everytime', src: 'assets/ragebait.mp4' },
     { type: 'video', date: 'the toilet stalls', text: 'getting stuck in toilet stalls with you is like genuinely so funny', src: 'assets/bathroom.mp4' },
@@ -65,7 +65,7 @@ milo and or batman.`;
     { kind: 'text', html: '<div class="birthday-stage">Tap</div>' },
     { kind: 'text', html: '<div class="birthday-stage">March 31st.</div>' },
     { kind: 'text', html: '<div class="birthday-stage">The day you were born.</div>' },
-    { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
+    { kind: 'text', html: '<div class="birthday-stage">The day your presence brought light into the world.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
     { kind: 'video' },
   ];
 
