@@ -55,7 +55,7 @@ const birthdayStages = [
   { kind: 'text', html: '<div class="birthday-stage">Tap</div>' },
   { kind: 'text', html: '<div class="birthday-stage">March 31st.</div>' },
   { kind: 'text', html: '<div class="birthday-stage">The day you were born.</div>' },
-  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\\'m so lucky I get to love you.</div></div>' },
+  { kind: 'text', html: '<div class="birthday-stage">The day my life changed.<div class="small-note">I\'m so lucky I get to love you.</div></div>' },
   { kind: 'video' },
 ];
 
