@@ -398,34 +398,76 @@ button {
 }
 
 @media (max-width: 700px) {
-  .hearts-panel {
-    padding-bottom: 18px;
+  .screen {
+    padding: 10px 14px 14px;
+  }
+
+  .panel {
+    width: 100%;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 18px 16px 110px;
+    border-radius: 24px;
+  }
+
+  .main-title {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    line-height: 1;
+  }
+
+  .script-title {
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
+    line-height: 1.05;
+    margin-bottom: 10px;
+  }
+
+  .letter-card {
+    min-height: auto;
+    padding: 18px 16px;
+  }
+
+  .letter-text {
+    font-size: clamp(1.05rem, 4.5vw, 1.35rem);
+    line-height: 1.35;
   }
 
   .hearts-grid {
     grid-template-columns: repeat(2, minmax(110px, 1fr));
-    gap: 10px;
-    margin: 18px auto;
+    gap: 12px;
+    margin: 18px auto 20px;
     width: 100%;
   }
 
   .heart-card {
-    min-height: 120px;
+    min-height: 130px;
   }
 
   .heart-card img {
-    max-width: 88%;
-    max-height: 88%;
-    margin: 0 auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
-.button-row {
-    margin-top: 10px;
+
+  .heart-label {
+    width: 58%;
+    font-size: 1rem;
+  }
+
+  .button-row {
+    margin-top: 8px;
     margin-bottom: 0;
+    padding-bottom: 10px;
   }
-.panel {
+
+  .primary-button,
+  .ghost-button,
+  .spotify-button {
     width: 100%;
-    max-height: calc(100vh - 28px);
-    padding: 20px 16px 24px;
-    border-radius: 24px;
+  }
+
+  .button-row > * {
+    flex: 1 1 100%;
   }
 }
